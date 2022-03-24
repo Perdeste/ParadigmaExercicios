@@ -1,0 +1,58 @@
+#lang racket
+
+(require rackunit)
+(require rackunit/text-ui)
+
+#|Exemplo 3.1|#
+(struct ponto (x y))
+
+(define (distancia a b)
+  (define p1 (ponto a b))
+  (sqrt (+ (sqr (ponto-x p1)) (sqr (ponto-y p1))))
+  )
+
+#|Exemplo 3.2|#
+(struct retangulo (w h)) 
+
+(define (classifique w h)
+  (define forma (retangulo w h))
+  (cond[(> (retangulo-w forma) (retangulo-h forma)) "largo"]
+       [(< (retangulo-w forma) (retangulo-h forma)) "alto"]
+       [else "quadrado"]))
+
+#|Exemplo 3.3|#
+(define nil false)
+(struct lista (first rest) #:transparent)
+
+(define (tamanhoLista list)
+  (if (or (equal? list false)) 0 (+ 1 (tamanhoLista (lista-rest list)))
+  ))
+
+#|Exercício 3.4|#
+(define (somarValores list)
+  (if (equal? list false) 0 (+ (lista-first list) (somarValores (lista-rest list))))
+  )
+
+#|Exercício 3.5|#
+(define (retirarLista list a)
+  (if (equal? list false)
+      false
+      (if (equal? (lista-first list) a)
+          (retirarLista (lista-rest list) a)
+          (lista  (lista-first list) (retirarLista (lista-rest list) a)))
+      )
+  )
+
+#|Exercício 3.8|#
+(struct arvore (p esq dir))
+
+(define (altura-arvore no)
+  
+  )
+
+#|Testes|#
+(check-equal? (distancia 3 4) 5)
+(check-equal? (classifique 1 2) "alto")
+(check-equal? (tamanhoLista (lista 5 (lista 7 nil))) 2)
+(check-equal? (somarValores (lista 5 (lista 7 nil))) 12)
+(check-equal? (retirarLista (lista 5 (lista 7 (lista 8 nil))) 7) (lista 5 (lista 8 nil)))
