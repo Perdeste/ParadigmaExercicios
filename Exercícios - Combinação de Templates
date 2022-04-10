@@ -1,0 +1,136 @@
+#lang racket
+
+(require rackunit)
+(require rackunit/text-ui)
+
+(define (add1 n)
+  (+ n 1))
+
+(define (sub1 n)
+  (- n 1))
+
+#|Exercício 5.1|#
+(define (funcao> a b)
+  (cond[(zero? a) false]
+       [(zero? b) true]
+       [else (funcao> (sub1 a) (sub1 b))]
+       )
+  )
+
+(define (funcao< a b)
+  (cond[(zero? b) false]
+       [(zero? a) true]
+       [else (funcao< (sub1 a) (sub1 b))]
+       )
+  )
+
+(define (funcao= a b)
+  (cond[(and (zero? a) (zero? b)) true]
+       [(zero? a) false]
+       [(zero? b) false]
+       [else (funcao= (sub1 a) (sub1 b))]
+       )
+
+  )
+
+(define (funcao>= a b)
+  (cond[(and (zero? a) (zero? b)) true]
+       [(zero? a) false]
+       [(zero? b) true]
+       [else (funcao>= (sub1 a) (sub1 b))]
+       )
+  )
+
+(define (funcao<= a b)
+  (cond[(and (zero? a) (zero? b)) true]
+       [(zero? b) false]
+       [(zero? a) true]
+       [else (funcao<= (sub1 a) (sub1 b))]
+       )
+  )
+
+#|Exercício 5.2|#
+(define (take lista n)
+  (cond[(empty? lista) empty]
+       [(zero? n) empty]
+       [else (cons (first lista) (take (rest lista) (sub1 n)))]
+        )
+  )
+
+#|Exercício 5.3|#
+(define (drop lista n)
+  (cond[(empty? lista) empty]
+       [(zero? n) lista]
+       [else (drop (rest lista) (sub1 n))]
+       )
+  )
+
+#|Exercício 5.4|#
+(define (remove-at lista n)
+  (cond[(empty? lista) empty]
+       [(zero? n) (rest lista)]
+       [else (cons (first lista) (remove-at (rest lista) (sub1 n)))]
+       )
+  )
+
+#|Exercício 5.5|#
+(define (insert-at lista n p)
+  (cond[(zero? p) (cons n lista)]
+       [(empty? lista) empty]      
+       [else (cons (first lista) (insert-at (rest lista) n (sub1 p)))]
+    )
+  )
+
+
+#|Exercício 5.6|#
+(define (sub-list lista i j)
+  (cond[(empty? lista) empty]
+       [(= j 1) empty]
+       [(> i 0) (sub-list (rest lista) (sub1 i) j)]
+       [else (cons (first lista) (sub-list (rest lista) i (sub1 j)))]
+       )
+  )
+
+#|Exercício 5.7|#
+(define (rotate-left lista n)
+  (cond[(empty? lista) empty]
+       [(zero? n) (first lista)]
+       [else (append )]
+       )
+  )
+
+(check-equal? (rotate-left (list 10 20 30 40 50) 2) (list 30 40 50 10 20))
+
+#|Exercício 5.8|#
+(define (append lista1 lista2)
+  (cond[(and (list? lista1) (not (empty? lista1))) (cons (first lista1) (append (rest lista1) lista2))]
+       [(empty? lista2) empty]
+       [else (cons (first lista2) (append lista1 (rest lista2)))]
+       )
+  )
+
+#|Exercício 5.9|#
+(define (merge lista1 lista2)
+  (cond[(and (empty? lista1) (empty? lista2)) empty]
+       [(empty? lista1) (cons (first lista2) (merge lista1 (rest lista2)))]
+       [(empty? lista2) (cons (first lista1) (merge (rest lista1) lista2))]
+       [(< (first lista1) (first lista2)) (cons (first lista1) (merge (rest lista1) lista2))]
+       [else (cons (first lista2) (merge lista1 (rest lista2)))]
+       )
+  )
+
+
+
+(check-equal? (funcao> 6 5) true)
+(check-equal? (funcao< 4 5) true)
+(check-equal? (funcao= 5 5) true)
+(check-equal? (funcao<= 3 3) true)
+(check-equal? (funcao>= 3 3) true)
+(check-equal? (take (list 10 40 70 20 3) 3) (list 10 40 70))
+(check-equal? (drop (list 10 40 70 20 3) 3) (list 20 3))
+(check-equal? (remove-at (list 10 40 70 20 3) 3) (list 10 40 70 3))
+(check-equal? (insert-at (list 10 40 70 20 3) 9 3) (list 10 40 70 9 20 3))
+(check-equal? (sub-list (list 10 40 70 20 30 80) 2 4) (list 70 20 30))
+#|(check-equal? (rotate-left (list 10 20 30 40 50) 2) (list 30 40 50 10 20))|#
+(check-equal? (append (list 1 2) (list 3 7 12 13)) (list 1 2 3 7 12 13))
+(check-equal? (merge (list 3 7 12) (list 2 4 5)) (list 2 3 4 5 7 12))

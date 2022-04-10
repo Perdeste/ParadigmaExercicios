@@ -1,0 +1,83 @@
+#lang racket
+
+#|Exercício 6.3|#
+;; A combinação (f f) resultara em: (f f) -> (f 2) -> (2 2), e como 2 não é um procedimento um erro será acusado
+
+#|Exercício 6.4|#
+(define (expressao1 a b)
+  (let* ([c (* 3 a)]
+        [d (- c b)]
+        [e (+ c b)]
+        [f (+ d e)]
+      )f)
+  
+  )
+
+(expressao1 5 3)
+
+(define (expressao2 a b c)
+  (let* ([lista (list a b c)]
+        [f (first lista)]
+        [r (rest lista)]
+        )(cons f r))
+  )
+
+(expressao2 2 5 8)
+
+#|Exercício 6.5|#
+#|Resultado: 54. O primeiro let atribui o valor 9 para o x (ficando (* 9 ...), ja o segundo
+let atribui o valor 3 para o x ([x (/ 9 3)]), por ultimo a soma de x com x e a multiplicação
+com o primeiro x, resulta em 54, ou seja, 9 * (3 + 3).
+|#
+
+#|Exercício 6.6|#
+;; Resultados respectivamente: 4 (list 4) 4 empty
+
+#|Exercício 6.7|#
+(define lista1 (λ (first . rest) (cons first rest)))
+
+(lista1 1 2 3 4 5 6 7)
+
+#|Exercício 6.8|#
+(define (cont pred? lista)
+  (cond[(empty? lista) 0]
+       [(pred? (first lista)) (+ 1 (cont pred? (rest lista)))]
+       [else (cont pred? (rest lista))]
+       )
+  )
+
+(cont positive? (list 1 -1 2 3 -2 5))
+
+#|Exercício 6.9|#
+(define (double func) (lambda (x) (func (func x))))
+
+(((double (double double)) add1) 5)
+
+#|Exercício 6.10|#
+
+(define (concatena . outros)
+    (cond[(empty? (first outros)) empty]
+       [else (append* (first outros) (concatena (rest outros)))]
+       )
+  )
+
+(concatena (list 1 2 3) (list 4) (list 5 6) (list 7 8))
+
+#|Exercício 6.11|#
+(define (mapeia func lista . outros)
+  (cond[(empty? lista) empty]
+      [else (cons (apply func (first lista) (mapeia first outros))
+            (apply mapeia func (rest lista) (mapeia rest outros)))])
+  )
+(mapeia + (list 1 2 3) (list 4 5 6))
+(mapeia list (list 1 2 3) (list 4 5 6))
+
+#|Exercício 6.13|#
+(define (cons1 x y)
+  (λ (m) (m x y))
+  )
+
+(define (cdr y)
+  (y (λ (p q) q)))
+
+(cdr1 (cons1 1 5))

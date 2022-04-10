@@ -1,0 +1,90 @@
+#lang racket
+
+(require rackunit)
+(require rackunit/text-ui)
+
+(define (add1 n)
+  (+ n 1))
+
+(define (sub1 n)
+  (- n 1))
+
+#|Exercício 4.1|#
+(define (fatorial n)
+  (cond [(zero? n) 1]
+        [else (* n (fatorial (sub1 n)))]
+        )
+  )
+
+#|Exercício 4.2|#
+(define (soma x y)
+  (cond[(zero? y) x]
+       [else (add1 (soma x (sub1 y)))]
+       )
+  )
+(define (subtracao x y)
+  (cond[(zero? y) x]
+       [else (sub1 (subtracao x (sub1 y)))]
+       )
+  )
+
+(define (multiplicacao x y)
+  (cond[(zero? y) 0]
+       [else (soma (multiplicacao x (sub1 y)) x)]
+       
+       )
+  )
+
+#|Exercício 4.3|#
+(define (impar? n)
+  (cond[(zero? n) false]
+       [else (par? (sub1 n))]
+       )
+  )
+
+(define (par? n)
+  (cond[(zero? n) true]
+       [else (impar? (sub1 n))])
+  )
+
+#|Exercício 4.4|#
+(define (divisor n x)
+  (if (= (remainder n x) 0) x 0)
+  )
+
+(define (perfeito n x)
+  (cond[(= x n) 0]
+       [(+ (divisor n x) (perfeito n (add1 x)))]
+    )
+  )
+
+(define (perfeito? n)
+  (= n (perfeito n 1)))
+
+#|Exercício 4.5|#
+(define (primo n x)
+  (cond[(= x 1) true]
+       [(or (<= n 1) (= (remainder n x) 0)) false]
+       [else (primo n (sub1 x))]
+    )
+  )
+
+(define (nPrimo a b)
+  (cond[(> a b) 0]
+       [else (if (primo a (sub1 a))
+                 (+ 1 (nPrimo (add1 a) b))
+                 (nPrimo (add1 a) b)
+              )]
+    )
+  )
+
+(check-equal? (fatorial 5) 120)
+(check-equal? (soma 5 6) 11)
+(check-equal? (subtracao 5 6) -1)
+(check-equal? (multiplicacao 6 7) 42)
+(check-equal? (par? 2) true)
+(check-equal? (impar? 9) true)
+(check-equal? (par? 9) false)
+(check-equal? (perfeito? 16) false)
+(check-equal? (perfeito? 28) true)
+(check-equal? (nPrimo 1 6) 3)

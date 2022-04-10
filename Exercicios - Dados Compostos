@@ -1,0 +1,76 @@
+#lang racket
+
+(require rackunit)
+(require rackunit/text-ui)
+
+#|Exemplo 3.1|#
+(struct ponto (x y))
+
+(define (distancia a b)
+  (define p1 (ponto a b))
+  (sqrt (+ (sqr (ponto-x p1)) (sqr (ponto-y p1))))
+  )
+
+#|Exemplo 3.2|#
+(struct retangulo (w h)) 
+
+(define (classifique w h)
+  (define forma (retangulo w h))
+  (cond[(> (retangulo-w forma) (retangulo-h forma)) "largo"]
+       [(< (retangulo-w forma) (retangulo-h forma)) "alto"]
+       [else "quadrado"]))
+
+#|Exemplo 3.3|#
+
+(define (tamanhoLista lista)
+  (if (empty? lista) 0 (+ 1 (tamanhoLista (rest lista))))
+  )
+
+#|Exercício 3.4|#
+(define (somarValores lista)
+  (if (empty? lista) 0 (+ (first lista) (somarValores (rest lista))))
+  )
+
+#|Exercício 3.5|#
+(define (retirarLista lista a)
+  (if (empty? lista)
+      empty
+      (if (equal? (first lista) a)
+          (retirarLista (rest lista) a)
+          (append (list  (first lista)) (retirarLista (rest lista) a)))
+      )
+  )
+
+#|Exercício 3.6|#
+(define (somaListaAninhada lista)
+  (cond [(empty? lista) 0]
+        [(list? lista) (+ (somaListaAninhada (first lista)) (somaListaAninhada (rest lista)))]
+        
+        [else lista]
+        )
+  )
+
+#|Exercício 3.7|#
+(define (aplaineListaAninhada lista)
+  (cond [(empty? lista) empty]
+        [(number? lista) (cons lista empty)]
+        [(list? lista) (append (aplaineListaAninhada (first lista)) (aplaineListaAninhada (rest lista)))]        
+        )
+  )
+
+#|Exercício 3.8|#
+(struct node (v left right))
+(define (alturaArvore tree)
+  (cond 
+    [(null? tree) 0]
+    [else (+ 1 (max (alturaArvore (node-left  tree)) (alturaArvore (node-right tree))))]))
+
+#|Testes|#
+(check-equal? (distancia 3 4) 5)
+(check-equal? (classifique 1 2) "alto")
+(check-equal? (tamanhoLista (list 5 7))2)
+(check-equal? (somarValores (list 5 7))12)
+(check-equal? (retirarLista (list 5 7 8) 7) (list 5 8))
+(check-equal? (somaListaAninhada (list (list 5 (list 6 empty)) (list 3 empty))) 14)
+(check-equal? (aplaineListaAninhada (list (list 5 (list 6 empty)) (list 3 empty))) (list 5 6 3))
+(check-equal? (alturaArvore (node 1 (node 2 null null) (node 2 (node 10 null null) null))) 3)

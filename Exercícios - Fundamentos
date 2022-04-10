@@ -1,0 +1,87 @@
+#lang racket
+
+(require rackunit)
+(require rackunit/text-ui)
+
+
+#|Exercício 2.1|#
+#|Respostas Respectivas:
+10
+12
+3
+6
+nada
+nada
+19
+#f
+4
+16
+6
+16
+|#
+
+#|Exercício 2.2|#
+(/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5))))) (* 3 (- 6 2) (- 2 7)))
+
+#|Exercício 2.3
+(/ 9 2)
+(+ 2.5 2)
+(* 2.5 3)
+O procedimento / retorna um erro caso o denominador seja zero,
+e quando seu quociente não resulta em um número inteiro o seu retorno sera representado por meio de fração
+|#
+
+#|Exercício 2.4|#
+(define (a-plus-abs-b a b)
+((if (> b 0) + -) a b))
+#|O procedimento acima representa a soma entre o valor de a e o módulo do valor b,
+ou seja, o procedimento if esta definindo qual o procedimento sera feito com os valores a e b
+|#
+
+#|Exercício 2.5|#
+(define (p) (p))
+(define (test x y)
+(if (= x 0)
+0
+y))
+#|Utilizar a expressão (test 0 (p)) resulta em um loop, pois o interpretador do racket
+usa a avaliação em ordem aplicativa. Se o interpretador utilizar a avaliação em ordem
+normal a expressão anterior não entraria em loop, pois a condição if encerraria a iteração
+retornando o valor 0 para o procedimento test.
+|#
+
+#|Exercício 2.6|#
+(define (maiorValor a b)
+  (if (>= a b) a b)
+  )
+(check-equal? (maiorValor 5 2) 5)
+
+#|Exercício 2.7|#
+(define (somaSqr a b c)
+  (+ (sqr (maiorValor a b)) (sqr (maiorValor b c)) )
+  )
+(check-equal? (somaSqr 1 2 3) 13)
+
+#|Exercício 2.8|#
+(define (distancia x y)
+  (sqrt (+ (sqr x) (sqr y)))
+  )
+(check-equal? (distancia 3 4) 5)
+
+#|Exercício 2.9|#
+(define (triangulo a b c)
+  (cond [(and (= a b) (= b c)) "equilatero"]
+        [(or (= a b) (= b c) (= a c)) "isosceles"]
+        [else "escaleno"]
+    )
+  )
+(check-equal? (triangulo 1 2 3) "escaleno")
+(check-equal? (triangulo 3 1 3) "isosceles")
+(check-equal? (triangulo 2 2 2) "equilatero")
+
+#|Exercício 2.10|#
+(define (imc peso altura)
+  (/ peso (sqr altura))
+  )
+
+(imc 55 1.68)
